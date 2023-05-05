@@ -3,8 +3,32 @@ const mongoose = require('mongoose');
 const config = require('./config');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
+const cors = require('cors');
 
 const app = express();
+
+
+const axios = require('axios');
+
+const options = {
+  method: 'GET',
+  url: 'https://odds.p.rapidapi.com/v4/sports',
+  params: { all: 'true' },
+  headers: {
+    'content-type': 'application/octet-stream',
+    'X-RapidAPI-Key': '80488c775fmsh4aec38ed431dd37p1d408djsn9993b3e1e317',
+    'X-RapidAPI-Host': 'odds.p.rapidapi.com'
+  }
+};
+
+try {
+  const response = await axios.request(options);
+  console.log(response.data);
+} catch (error) {
+  console.error(error);
+
+}
+app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(config.dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
